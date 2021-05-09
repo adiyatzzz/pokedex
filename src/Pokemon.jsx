@@ -50,7 +50,9 @@ const Pokemon = (props) => {
     axios
       .get(`https://pokeapi.co/api/v2/pokemon/${pokemonID}/`)
       .then((response) => setPokemon(response.data))
-      .catch((error) => setPokemon(false));
+      .catch((error) => {
+        setPokemon(false);
+      });
   }, [pokemonID]);
   console.log(pokemon);
   /**
@@ -70,7 +72,7 @@ const Pokemon = (props) => {
                 <img
                   src={front_default}
                   alt={name}
-                  style={{ position: "absolute", top: "-35px", right: "-80px" }}
+                  style={{ position: "absolute", top: "-25px", right: "100%" }}
                 />
               </Typography>
               <img src={fullImgUrl} alt={name} className={classes.imgCenter} />
@@ -95,8 +97,10 @@ const Pokemon = (props) => {
     <React.Fragment>
       <Container maxWidth="md" classes={{ root: classes.pokeContainer }}>
         {pokemon === undefined && <CircularProgress />}
-        {pokemon !== undefined && generatePokemonJSX()}
-        {pokemon === false && <Typography>Pokemon Not Found</Typography>}
+        {pokemon !== undefined && pokemon && generatePokemonJSX()}
+        {pokemon === false && (
+          <Typography variant="h6">Pokemon Not Found</Typography>
+        )}
         {pokemon !== undefined && (
           <Button
             variant="contained"
