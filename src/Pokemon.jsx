@@ -5,10 +5,12 @@ import {
   Container,
   Grid,
   makeStyles,
+  CircularProgress,
+  Button,
 } from "@material-ui/core";
 import { RestaurantMenu } from "@material-ui/icons";
-import React, { useState } from "react";
-import mockData from "./mockData";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
   pokeContainer: {
@@ -31,6 +33,7 @@ const useStyles = makeStyles((theme) => ({
     position: "relative",
     display: "inline-block",
     margin: "0 auto",
+    textTransform: "capitalize",
     [theme.breakpoints.down("md")]: {
       fontSize: "3rem",
     },
@@ -38,10 +41,18 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Pokemon = (props) => {
+  const { history } = props;
   const classes = useStyles();
   const pokemonID = props.match.params.pokemonID;
-  const [pokemon, setPokemon] = useState(mockData[pokemonID]);
+  const [pokemon, setPokemon] = useState(undefined);
 
+  useEffect(() => {
+    axios
+      .get(`https://pokeapi.co/api/v2/pokemon/${pokemonID}/`)
+      .then((response) => setPokemon(response.data))
+      .catch((error) => setPokemon(false));
+  }, [pokemonID]);
+  console.log(pokemon);
   /**
    * return card that contains pokemon information
    */
@@ -49,7 +60,6 @@ const Pokemon = (props) => {
     const { name, id, species, height, weight, types, sprites } = pokemon;
     const fullImgUrl = `https://pokeres.bastionbot.org/images/pokemon/${pokemonID}.png`;
     const { front_default } = sprites;
-    console.log(pokemon);
     return (
       <Card>
         <CardContent>
@@ -84,7 +94,19 @@ const Pokemon = (props) => {
   return (
     <React.Fragment>
       <Container maxWidth="md" classes={{ root: classes.pokeContainer }}>
-        {generatePokemonJSX()}
+        {pokemon === undefined && <CircularProgress />}
+        {pokemon !== undefined && generatePokemonJSX()}
+        {pokemon === false && <Typography>Pokemon Not Found</Typography>}
+        {pokemon !== undefined && (
+          <Button
+            variant="contained"
+            onClick={() => {
+              history.push("/");
+            }}
+          >
+            Back
+          </Button>
+        )}
       </Container>
     </React.Fragment>
   );
