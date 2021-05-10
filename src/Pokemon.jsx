@@ -7,6 +7,7 @@ import {
   makeStyles,
   CircularProgress,
   Button,
+  Link,
 } from "@material-ui/core";
 import { RestaurantMenu } from "@material-ui/icons";
 import React, { useState, useEffect } from "react";
@@ -54,7 +55,6 @@ const Pokemon = (props) => {
         setPokemon(false);
       });
   }, [pokemonID]);
-  console.log(pokemon);
   /**
    * return card that contains pokemon information
    */
@@ -88,29 +88,51 @@ const Pokemon = (props) => {
               <Typography variant="h6">Types : {types[0].type.name}</Typography>
             </Grid>
           </Grid>
+          <Button
+            variant="contained"
+            onClick={() => {
+              history.push("/");
+            }}
+            style={{
+              marginTop: "10px",
+            }}
+          >
+            Back
+          </Button>
         </CardContent>
       </Card>
+    );
+  };
+
+  const notFoundComp = () => {
+    return (
+      <React.Fragment>
+        <Typography variant="h6" align="center">
+          Pokemon Not Found
+        </Typography>
+        <Link
+          component="button"
+          variant="body2"
+          onClick={() => {
+            history.push("/");
+          }}
+        >
+          Back
+        </Link>
+      </React.Fragment>
     );
   };
 
   return (
     <React.Fragment>
       <Container maxWidth="md" classes={{ root: classes.pokeContainer }}>
-        {pokemon === undefined && <CircularProgress />}
+        {pokemon === undefined && (
+          <p style={{ textAlign: "center" }}>
+            <CircularProgress />
+          </p>
+        )}
         {pokemon !== undefined && pokemon && generatePokemonJSX()}
-        {pokemon === false && (
-          <Typography variant="h6">Pokemon Not Found</Typography>
-        )}
-        {pokemon !== undefined && (
-          <Button
-            variant="contained"
-            onClick={() => {
-              history.push("/");
-            }}
-          >
-            Back
-          </Button>
-        )}
+        {pokemon === false && notFoundComp()}
       </Container>
     </React.Fragment>
   );
