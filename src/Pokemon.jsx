@@ -9,7 +9,6 @@ import {
   Button,
   Link,
 } from "@material-ui/core";
-import { RestaurantMenu } from "@material-ui/icons";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
@@ -60,8 +59,8 @@ const Pokemon = (props) => {
    */
   const generatePokemonJSX = () => {
     const { name, id, species, height, weight, types, sprites } = pokemon;
-    const fullImgUrl = `https://pokeres.bastionbot.org/images/pokemon/${pokemonID}.png`;
-    const { front_default } = sprites;
+    const { front_default, other } = sprites;
+    const fullImg = other.dream_world.front_default;
     return (
       <Card>
         <CardContent>
@@ -75,7 +74,7 @@ const Pokemon = (props) => {
                   style={{ position: "absolute", top: "-25px", right: "100%" }}
                 />
               </Typography>
-              <img src={fullImgUrl} alt={name} className={classes.imgCenter} />
+              <img src={fullImg} alt={name} className={classes.imgCenter} />
             </Grid>
             <Grid item md={6} xs={12}>
               <Typography variant="h6" style={{ fontWeight: "bold" }}>

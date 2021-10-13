@@ -57,7 +57,6 @@ const Pokedex = (props) => {
   );
   const [hasMore, setHasMore] = useState(true);
   const [pokeIndex, setPokeIndex] = useState(0);
-  let apiCallCount = 1;
   useEffect(() => {
     getPokeAPI();
   }, []);
